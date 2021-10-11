@@ -22,7 +22,8 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:text="Stop"
-        android:layout_below="@id/start" />
+        android:layout_below="@id/start"
+        android:onClick="stopDownload"/>
 
     <Switch
         android:id="@+id/switch1"
@@ -31,4 +32,13 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_below="@id/stop" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_above="@id/start"
+        android:id="@+id/textView"
+        android:text="" />
 </RelativeLayout>

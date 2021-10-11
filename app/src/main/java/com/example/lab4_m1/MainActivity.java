@@ -6,11 +6,14 @@ import 	android.util.Log;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private Button startButton;
+    private volatile boolean stopThread = false;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         startButton = findViewById(R.id.start);
+        textView = (TextView) findViewById(R.id.textView);
     }
 
     public void mockFileDownloader() {
@@ -29,6 +33,24 @@ public class MainActivity extends AppCompatActivity {
         });
 
         for (int downloadProgress = 0; downloadProgress <= 100;downloadProgress=downloadProgress+10) {
+            if (stopThread){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        startButton.setText("Start");
+                    }
+                });
+                return;
+            }
+
+            int finalDownloadProgress = downloadProgress;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    textView.setText("Download Progress: " + finalDownloadProgress + "%");
+                }
+            });
+
             Log.d(TAG,"Download Progress: " + downloadProgress + "%");
             try {
                 Thread.sleep(1000);
@@ -47,8 +69,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startDownload(View view){
+        stopThread = false;
         ExampleRunnable runnable = new ExampleRunnable();
         new Thread(runnable).start();
+    }
+
+    public void stopDownload(View view){
+        stopThread = true;
     }
 
     class ExampleRunnable implements Runnable {
