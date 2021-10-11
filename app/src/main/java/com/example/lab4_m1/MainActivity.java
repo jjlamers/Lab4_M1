@@ -29,6 +29,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startDownload(View view){
-        mockFileDownloader();
+        ExampleRunnable runnable = new ExampleRunnable();
+        new Thread(runnable).start();
+    }
+
+    class ExampleRunnable implements Runnable {
+        @Override
+        public void run() {
+            mockFileDownloader();
+        }
     }
 }
